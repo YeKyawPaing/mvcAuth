@@ -14,6 +14,13 @@ namespace MvcTest.Controllers
     {
         // GET: Auth
         [HttpGet]
+        public ActionResult Index()
+        {
+            var db = new MainDbContext();
+            return View(db.Lists.Where(x => x.Public == "YES").ToList());
+        }
+
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
@@ -99,14 +106,22 @@ namespace MvcTest.Controllers
             {
                 using (var db = new MainDbContext())
                 {
-                    var encryptedPassword = CustomEnrypt.Encrypt(model.Password);
-                    var user = db.Users.Create();
-                    user.Email = model.Email;
-                    user.Password = encryptedPassword;
-                    user.Country = model.Country;
-                    user.Name = model.Name;
-                    db.Users.Add(user);
-                    db.SaveChanges();
+                    var queryUser = db.Users.FirstOrDefault(u => u.Email == model.Email);
+                    if (queryUser == null)
+                    {
+                        var encryptedPassword = CustomEnrypt.Encrypt(model.Password);
+                        var user = db.Users.Create();
+                        user.Email = model.Email;
+                        user.Password = encryptedPassword;
+                        user.Country = model.Country;
+                        user.Name = model.Name;
+                        db.Users.Add(user);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return RedirectToAction("Registration");
+                    }
                 }
             }
             else

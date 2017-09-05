@@ -6,11 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MvcTest.Models
 {
-    public class List
+    public class Lists
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public string Details { get; set; }
 
         public string Date_Posted { get; set; }
@@ -18,5 +17,6 @@ namespace MvcTest.Models
         public string Date_Edited { get; set; }
         public string Time_Edited { get; set; }
         public string Public { get; set; }
+        public int User_Id { get; set; }
     }
 }
